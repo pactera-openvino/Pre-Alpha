@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/bt_ico">
+        <file>image/lab_normal.png</file>
+        <file>image/lab_Pressed.png</file>
+        <file>image/meeting_normal.png</file>
+        <file>image/meeting_Pressed.png</file>
+        <file>image/visitor_normal.png</file>
+        <file>image/visitor_pressed.png</file>
+    </qresource>
+</RCC>
