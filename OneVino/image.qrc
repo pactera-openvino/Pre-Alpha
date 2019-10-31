@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/bt">
+        <file>image/Login_bg_point.png</file>
+        <file>image/Login_bg_version1.png</file>
+    </qresource>
+</RCC>
