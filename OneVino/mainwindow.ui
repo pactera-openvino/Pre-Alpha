@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1920</width>
+    <height>1200</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>OneVino</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-image: url(:/bt/image/Login_bg_version1.png);</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <widget class="QPushButton" name="reg_button">
+    <property name="geometry">
+     <rect>
+      <x>820</x>
+      <y>280</y>
+      <width>269</width>
+      <height>87</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border-style:none;
+padding:11px;
+border-radius:3px;
+background:transparent;</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="flat">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="visitor_bt">
+    <property name="geometry">
+     <rect>
+      <x>820</x>
+      <y>400</y>
+      <width>269</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border-style:none;
+padding:11px;
+border-radius:3px;
+background:transparent;</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="flat">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="meeting_bt">
+    <property name="geometry">
+     <rect>
+      <x>820</x>
+      <y>510</y>
+      <width>269</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border-style:none;
+padding:11px;
+border-radius:3px;
+background:transparent;</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="flat">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="lab_bt">
+    <property name="geometry">
+     <rect>
+      <x>820</x>
+      <y>620</y>
+      <width>269</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border-style:none;
+padding:11px;
+border-radius:3px;
+background:transparent;</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="flat">
+     <bool>true</bool>
+    </property>
+   </widget>
+  </widget>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections/>
+</ui>

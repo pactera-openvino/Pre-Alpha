@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Visitor</class>
+ <widget class="QDialog" name="Visitor">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1920</width>
+    <height>1200</height>
+   </rect>
+  </property>
+  <property name="font">
+   <font>
+    <pointsize>33</pointsize>
+   </font>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(52, 101, 164);</string>
+  </property>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1920</width>
+     <height>56</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(238, 238, 236);
+font: 33pt &quot;Ubuntu&quot;;</string>
+   </property>
+   <property name="text">
+    <string>OneVino</string>
+   </property>
+   <property name="scaledContents">
+    <bool>false</bool>
+   </property>
+   <property name="textInteractionFlags">
+    <set>Qt::LinksAccessibleByMouse</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="video">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>56</y>
+     <width>1200</width>
+     <height>800</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(46, 52, 54);</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_3">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>856</y>
+     <width>1200</width>
+     <height>54</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(238, 238, 236);
+font: 30pt &quot;Ubuntu&quot;;</string>
+   </property>
+   <property name="text">
+    <string>特征识别信息</string>
+   </property>
+  </widget>
+  <widget class="QTableView" name="DetailView">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>910</y>
+     <width>1200</width>
+     <height>250</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_4">
+   <property name="geometry">
+    <rect>
+     <x>1200</x>
+     <y>56</y>
+     <width>691</width>
+     <height>56</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font: 33pt &quot;Ubuntu&quot;;
+color: rgb(238, 238, 236);</string>
+   </property>
+   <property name="text">
+    <string>识别信息统计</string>
+   </property>
+  </widget>
+  <widget class="QTableView" name="TotalView">
+   <property name="geometry">
+    <rect>
+     <x>1200</x>
+     <y>112</y>
+     <width>720</width>
+     <height>744</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_5">
+   <property name="geometry">
+    <rect>
+     <x>1200</x>
+     <y>856</y>
+     <width>360</width>
+     <height>54</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font: 30pt &quot;Ubuntu&quot;;
+color: rgb(238, 238, 236);</string>
+   </property>
+   <property name="text">
+    <string>性别率</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_6">
+   <property name="geometry">
+    <rect>
+     <x>1560</x>
+     <y>856</y>
+     <width>360</width>
+     <height>54</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font: 30pt &quot;Ubuntu&quot;;
+color: rgb(238, 238, 236);</string>
+   </property>
+   <property name="text">
+    <string>表情率</string>
+   </property>
+  </widget>
+  <widget class="QChartView" name="SexChart" native="true">
+   <property name="geometry">
+    <rect>
+     <x>1200</x>
+     <y>910</y>
+     <width>360</width>
+     <height>250</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
+  </widget>
+  <widget class="QChartView" name="EmChart" native="true">
+   <property name="geometry">
+    <rect>
+     <x>1560</x>
+     <y>910</y>
+     <width>360</width>
+     <height>250</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
+  </widget>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QChartView</class>
+   <extends>QWidget</extends>
+   <header>qchartview.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
