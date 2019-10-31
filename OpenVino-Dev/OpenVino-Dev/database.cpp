@@ -1,0 +1,444 @@
+#include "database.hpp"
+
+
+/********************************************************************
+Fuction: QueryVistorsNum
+Description: Query Visitor information
+Parameter: struct personAttribute *perAttrPt, string str, struct qryCond *qryPt
+Return Value:
+Author:LiuYonggang
+date:2019.10.21
+********************************************************************/
+int QueryVistorsNum(struct personAttribute *perAttrPt, string str, struct qryCond *qryPt)
+{
+    QSqlQueryModel *model = new QSqlQueryModel();
+    static int visitorNum = 0;
+    int cnt = 0;
+    QSqlQuery qry(db);
+
+    sprintf(qTBuffer, "SELECT * FROM %s ", str.c_str());
+
+    if( !qry.exec(qTBuffer) )   // Query Table Failure
+    {
+        qDebug("Excute Query Person number in time internal fail");
+        return -1;
+    }
+    else
+    {
+        model->setQuery(qry);
+        visitorNum = model->rowCount();
+        qDebug ("Query logNum number:%d", visitorNum);
+        //return visitorNum;
+    }
+
+
+    sprintf(qTBuffer, "SELECT * FROM %s ", str.c_str());
+    qry.exec(qTBuffer);
+
+    QSqlRecord rec = qry.record();
+
+    for( cnt = 0; (cnt < qryPt->startAddr) && qry.next(); cnt++ );
+
+    if (cnt != qryPt->startAddr)
+    {
+        qDebug("Query Visitor log Postion error");
+    }
+
+    qry.previous();
+
+    for( cnt = 0; (cnt < qryPt->dataLenth) && qry.next(); cnt++ )
+    {
+
+        perAttrPt[cnt].id = qry.value(0).toInt();
+        QString name = qry.value(1).toString();
+        perAttrPt[cnt].name = name.toStdString();
+        QString sex = qry.value(2).toString();
+        perAttrPt[cnt].sex = sex.toStdString();
+        perAttrPt[cnt].age = qry.value(3).toInt();
+
+        QString expression = qry.value(4).toString();
+        perAttrPt[cnt].expression = expression.toStdString();
+        QString clothcolor = qry.value(5).toString();
+        perAttrPt[cnt].clothcolor = clothcolor.toStdString();
+        QString hair = qry.value(6).toString();
+        perAttrPt[cnt].hair = hair.toStdString();
+        QString glass = qry.value(7).toString();
+        perAttrPt[cnt].glass = glass.toStdString();
+        QString sleeves = qry.value(8).toString();
+        perAttrPt[cnt].sleeves = sleeves.toStdString();
+        QString time = qry.value(9).toString();
+        perAttrPt[cnt].time = time.toStdString();
+
+    }
+
+    if (cnt != qryPt->dataLenth)
+    {
+        qDebug("Query Vistors log Number error");
+    }
+
+    return SUCC;
+}
+
+/********************************************************************
+Fuction: AddOnePersonAttribute
+Description: Add a member attribute into PersonAttr Table
+Parameter: struct personAttribute *pt, string str
+Return Value: enum RETVALUE
+Author: LiuYonggang
+date: 2019.10.21
+********************************************************************/
+enum RETVALUE AddOnePersonAttribute(struct personAttribute *pt, string str)
+{
+    QSqlQuery qry(db);
+
+    sprintf(qTBuffer, "SELECT * FROM %s WHERE name='%s'", str.c_str() , pt->name.c_str());
+
+    if( !qry.exec(qTBuffer) )   // Query Table Failure
+    {
+        qDebug("Excute Query table fail");
+        return FAIL;
+    }
+    else
+    {
+#if DEBUG_MODE
+        qDebug( "Excute Query table Successful!" );
+#endif
+        QSqlRecord rec = qry.record();
+
+       QSqlQueryModel *model = new QSqlQueryModel();
+       model->setQuery(qry);
+       int nRecordCount = model->rowCount();
+
+       if (nRecordCount >= 1)
+       {
+#if DEBUG_MODE
+	   qDebug() << ("=============nRecordCount:%d", nRecordCount);
+           qDebug( "The Member %d has already existed and exit directly", pt->id);
+#endif
+	   return EXIST;
+       }
+    }
+    sprintf(qTBuffer,"INSERT INTO %s VALUES(%d, '%s', '%s', %d, '%s', '%s','%s','%s', '%s', '%s')", str.c_str(), pt->id, pt->name.c_str(), pt->sex.c_str(), pt->age,  pt->expression.c_str(), pt->clothcolor.c_str(), pt->hair.c_str(), pt->glass.c_str(), pt->sleeves.c_str(), pt->time.c_str() );
+
+    if( !qry.exec(qTBuffer) )
+    {
+        qDebug() << "Insert Member failure!";
+        return FAIL;
+    }
+    else
+    {
+#if DEBUG_MODE
+        qDebug( "Insert Member Succesful!" );
+#endif
+        return SUCC;
+    }
+}
+
+/********************************************************************
+Fuction: DeleteOnePersonAttribute
+Description: Delete a member attribute from PersonAttr Table
+Parameter: struct personAttribute *pt, string str
+Return Value: enum RETVALUE
+Author: LiuYonggang
+date: 2019.10.21
+********************************************************************/
+enum RETVALUE DeleteOnePersonAttribute(struct personAttribute *pt, string str)
+{
+    QSqlQuery qry(db);
+
+    sprintf(qTBuffer, "DELETE FROM %s WHERE name = '%s'", str.c_str(), pt->name.c_str());
+
+    if( !qry.exec(qTBuffer) )
+    {
+        qDebug() << "Execute Delete Command Failure";
+        return FAIL;
+    }
+    else
+    {
+#if DEBUG_MODE
+	qDebug() << "Execute Delete Command Sucessfully";
+#endif
+	return SUCC;
+    }
+}
+
+/********************************************************************
+Fuction: UpdateOnePersonAttribute
+Description: Add a member attribute into PersonAttr Table
+Parameter: struct personAttribute *pt
+Return Value:
+Author: LiuYonggang
+date: 2019.10.21
+********************************************************************/
+bool UpdateOnePersonAttribute(int idVale)
+{
+    QSqlQuery qry(db);
+
+    sprintf(qTBuffer,"UPDATE PersonAttr SET hair = 'long' WHERE id = %d",idVale);
+
+    if( !qry.exec(qTBuffer) )
+    {
+        qDebug() << "Update Member Failure!";
+        return false;
+    }
+    else
+    {
+#if DEBUG_MODE
+        qDebug( "Update Member Suceesful!" );
+#endif
+	return true;
+    }
+}
+
+/********************************************************************
+Fuction: QueryTableAccordingTime
+Description: Query log at some gap and return log information
+Parameter: struct personAttribute *perAttrPt, string str, struct qryCond *qryPt
+Return Value: int, struct personAttribute *perAttrPt
+Author: LiuYonggang
+date: 2019.10.21
+********************************************************************/
+int QueryTableAccordingTime(struct personAttribute *perAttrPt, string str, struct qryCond *qryPt)
+{
+    QSqlQueryModel *model = new QSqlQueryModel();
+    static int logNum = 0;
+    int cnt = 0;
+    QSqlQuery qry(db);
+
+    if (0 == qryPt->flag)
+    {
+        sprintf(qTBuffer, "SELECT * FROM %s WHERE time > '%s' and time < '%s' ", str.c_str(), qryPt->startTime.c_str(), qryPt->endTime.c_str());
+
+        if( !qry.exec(qTBuffer) )   // Query Table Failure
+        {
+            qDebug("Excute Query Person number in time internal fail");
+            return -1;
+        }
+        else
+        {
+            model->setQuery(qry);
+            logNum = model->rowCount();
+            qDebug ("Query logNum number:%d", logNum);
+            return logNum;
+        }
+    }
+    else if (1 == qryPt->flag)
+    {
+
+        sprintf(qTBuffer, "SELECT * FROM %s WHERE time > '%s' and time < '%s' ", str.c_str(), qryPt->startTime.c_str(), qryPt->endTime.c_str());
+        qry.exec(qTBuffer);
+
+        QSqlRecord rec = qry.record();
+
+        for( cnt = 0; (cnt < qryPt->startAddr) && qry.next(); cnt++ );
+
+        if (cnt != qryPt->startAddr)
+        {
+            qDebug("Query log Postion error");
+        }
+
+        qry.previous();
+        for( cnt = 0; (cnt < qryPt->dataLenth) && qry.next(); cnt++ )
+        {
+            perAttrPt[cnt].id = qry.value(0).toInt();
+            QString name = qry.value(1).toString();
+            perAttrPt[cnt].name = name.toStdString();
+            QString sex = qry.value(2).toString();
+            perAttrPt[cnt].sex = sex.toStdString();
+            perAttrPt[cnt].age = qry.value(3).toInt();
+
+            QString expression = qry.value(4).toString();
+            perAttrPt[cnt].expression = expression.toStdString();
+            QString clothcolor = qry.value(5).toString();
+            perAttrPt[cnt].clothcolor = clothcolor.toStdString();
+            QString hair = qry.value(6).toString();
+            perAttrPt[cnt].hair = hair.toStdString();
+            QString glass = qry.value(7).toString();
+            perAttrPt[cnt].glass = glass.toStdString();
+            QString sleeves = qry.value(8).toString();
+            perAttrPt[cnt].sleeves = sleeves.toStdString();
+            QString time = qry.value(9).toString();
+            perAttrPt[cnt].time = time.toStdString();
+	}
+
+        if (cnt != qryPt->dataLenth)
+        {
+            qDebug("Query log Number error");
+        }
+    }
+}
+
+/********************************************************************
+Fuction: QueryTotalPerson
+Description: Query male,female,total number
+Parameter: string str, string type
+Return Value:
+Author:LiuYonggang
+date:2019.10.21
+********************************************************************/
+int QueryTotalPerson(string str, string type)
+{
+    QSqlQueryModel *model = new QSqlQueryModel();
+    int maleCnt,femaleCnt;
+    QSqlQuery qry(db);
+
+    // Query male number
+    sprintf(qTBuffer, "SELECT * FROM %s WHERE sex='男'", str.c_str());
+    if( !qry.exec(qTBuffer) )   // Query Table Failure
+    {
+        qDebug("Excute Query table fail");
+        return -1;
+    }
+    else
+    {
+        qDebug( "Excute Query table Successful!" );
+
+        QSqlRecord rec = qry.record();
+        model->setQuery(qry);
+        maleCnt = model->rowCount();
+        qDebug ("Male number:%d", maleCnt);
+    }
+
+    // Query female number
+    sprintf(qTBuffer, "SELECT * FROM %s WHERE sex='女'", str.c_str());
+    if( !qry.exec(qTBuffer) )   // Query Table Failure
+    {
+        qDebug("Excute Query table fail");
+        return -1;
+    }
+    else
+    {
+        qDebug( "Excute Query table Successful!" );
+
+        QSqlRecord rec = qry.record();
+        model->setQuery(qry);
+        femaleCnt = model->rowCount();
+        qDebug ("Female Number:%d", femaleCnt);
+    }
+
+
+    if (0 == strcmp(type.c_str(), "male"))
+    {
+        return maleCnt;
+    }
+    else if (0 == strcmp(type.c_str(), "female"))
+    {
+        return femaleCnt;
+    }
+    else if (0 == strcmp(type.c_str(), "all"))
+    {
+        return maleCnt + femaleCnt;
+    }
+
+}
+
+/********************************************************************
+Fuction: QueryWholeTable
+Description: Query all members from PersonAttr Table
+Parameter: string str
+Return Value: enum RETVALUE
+Author: LiuYonggang
+date: 2019.10.21
+********************************************************************/
+enum RETVALUE QueryWholeTable(string str)
+{
+    QSqlQuery qry(db);
+
+    sprintf(qTBuffer, "SELECT * FROM %s", str.c_str());
+
+    if( !qry.exec(qTBuffer) )
+    {
+        qDebug() << "Query The Whole Table Failure!";
+        return FAIL;
+    }
+    else
+    {
+#if DEBUG_MODE
+        qDebug( "Selected Updated Table Successful!" );
+#endif
+	QSqlRecord rec = qry.record();
+
+        for( int r=0; qry.next(); r++ )
+        {
+            int id = qry.value(0).toInt();
+            QString name = qry.value(1).toString();
+            QString sex = qry.value(2).toString();
+            int age = qry.value(3).toInt();
+
+            QString expression = qry.value(4).toString();
+            QString clothcolor = qry.value(5).toString();
+            QString hair = qry.value(6).toString();
+            QString glass = qry.value(7).toString();
+            QString sleeves = qry.value(8).toString();
+            QString time = qry.value(9).toString();
+
+            qDebug()<<QString("ID:%1 Name:%2 Sex:%3 Age:%4 Expre:%5 Col:%6 Hair:%7 Gls:%8 Sle:%9 Tim:%10").arg(id).arg(name).arg(sex).arg(age).arg(expression).arg(clothcolor).arg(hair).arg(glass).arg(sleeves).arg(time);
+        }
+
+        return SUCC;
+    }
+
+}
+
+/********************************************************************
+Fuction: CreatePersonAttributeTab
+Description: Create Person Attributes Table
+Parameter: string str
+Return Value: enum RETVALUE
+Author: LiuYonggang
+date: 2019.10.21
+********************************************************************/
+enum RETVALUE CreatePersonAttributeTab(string str)
+{
+    QSqlQuery qry(db);
+
+    sprintf(qTBuffer, "CREATE TABLE IF NOT EXISTS %s(id INTEGER UNIQUE PRIMARY KEY, name varchar(20), sex varchar(10), age int, expression varchar(10), clothcolor varchar(10), hair varchar(10), glass varchar(10), sleeves varchar(10), time varchar(30))", str.c_str());
+    if(!qry.exec(qTBuffer))
+    {
+        qDebug() << "PersonAttr Table created Failure!";
+        return FAIL;
+    }
+    else
+    {
+#if DEBUG_MODE
+        qDebug() << "PersonAttr Table created Sucessful!";
+#endif
+	return SUCC;
+    }
+}
+
+/********************************************************************
+Fuction: CreateDatabaseConnectionSwitch
+Description: Create database
+Parameter: QSqlDatabase db, bool on_off
+Return Value: enum RETVALUE
+Author: LiuYonggang
+date: 2019.10.21
+********************************************************************/
+enum RETVALUE CreateDatabaseConnectionSwitch(QSqlDatabase db, bool on_off)
+{
+
+    if (1 == on_off)
+    {
+        db = QSqlDatabase::addDatabase( "QSQLITE" );            // add database
+        db.setDatabaseName( "localhost" );                      // set database name
+
+        if(!db.open())  // open connection
+        {
+            qDebug( "Connection Database Failure!\n" );         // qFatal
+            return FAIL;
+        }
+        else
+        {
+            qDebug("Connected Database Successful!\n" );
+        }
+    }
+    else
+    {
+        db.close();
+        //QFile::remove("localhost");
+    }
+
+    return SUCC;
+}
+
